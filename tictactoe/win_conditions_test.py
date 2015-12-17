@@ -1,5 +1,5 @@
 import unittest
-from tictactoe import *
+from win_conditions import *
 
 horizontal_win = [
     ["O", "O", "O"],
@@ -19,6 +19,12 @@ diagonal_win = [
     [None, "X", "O"]
 ]
 
+draw_grid = [
+    ["O", "X", "O"],
+    ["X", "O", "X"],
+    ["X", "O", "X"]
+]
+
 
 class WinningTests(unittest.TestCase):
     def test_horizontal(self):
@@ -27,6 +33,7 @@ class WinningTests(unittest.TestCase):
         assert win(horizontal_win)
         assert not win_vertical(horizontal_win)
         assert not win_diagonal(horizontal_win)
+        assert not draw(horizontal_win)
 
     def test_vertical(self):
         assert win_vertical_at(vertical_win, 1)
@@ -34,6 +41,7 @@ class WinningTests(unittest.TestCase):
         assert win(vertical_win)
         assert not win_horizontal(vertical_win)
         assert not win_diagonal(vertical_win)
+        assert not draw(vertical_win)
 
     def test_diagonal(self):
         assert win_main_diagonal(diagonal_win)
@@ -42,6 +50,13 @@ class WinningTests(unittest.TestCase):
         assert not win_horizontal(diagonal_win)
         assert not win_vertical(diagonal_win)
         assert not win_second_diagonal(diagonal_win)
+        assert not draw(diagonal_win)
+
+    def test_draw(self):
+        print draw_grid[0]
+        print draw_grid[0][0]
+        assert draw(draw_grid)
+        assert not win(draw_grid)
 
 
 def main():

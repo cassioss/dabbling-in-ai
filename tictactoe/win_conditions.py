@@ -2,6 +2,7 @@
 # Beginning of most AI projects - how an AI can learn how to play tic-tac-toe by itself.
 #
 
+
 # Check for null entries
 
 def not_null_at(game_grid, x, y):
@@ -50,3 +51,19 @@ def win_horizontal(game_grid):
 
 def win(game_grid):
     return win_horizontal(game_grid) or win_vertical(game_grid) or win_diagonal(game_grid)
+
+
+# Check if every tile of the grid is filled
+
+def grid_filled(game_grid):
+    for x in game_grid:
+        for y in game_grid[x]:
+            if game_grid[x][y] is None:
+                return False
+    return True
+
+
+# Draw
+
+def draw(game_grid):
+    return grid_filled(game_grid) and not win(game_grid)
