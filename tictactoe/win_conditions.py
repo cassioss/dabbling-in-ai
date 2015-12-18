@@ -1,5 +1,5 @@
 #
-# Beginning of most AI projects - how an AI can learn how to play tic-tac-toe by itself.
+# Checks winning conditions for a 3x3 tic-tac-toe board.
 #
 
 

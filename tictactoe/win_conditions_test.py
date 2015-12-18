@@ -1,6 +1,8 @@
 import unittest
 from win_conditions import *
 
+# Basic tests for different board scenarios.
+
 horizontal_win = [
     ["O", "O", "O"],
     [None, "X", None],

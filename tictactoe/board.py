@@ -8,10 +8,13 @@
 class Board():
     rows = 3
     cols = 3
-    grid = [[None] * cols] * rows
+    grid = [[]]
+
+    def __init__(self):
+        self.grid = [[None for y in range(self.cols)] for x in range(self.rows)]
 
     def __str__(self):
-        output = ""
+        output = "\n"
         for x in range(self.rows):
             for y in range(self.cols):
                 if self.grid[x][y] is None:
@@ -28,9 +31,10 @@ class Board():
     def play_at(self, x, y, symbol):
         self.grid[x][y] = symbol
 
+    def restart(self):
+        for x in range(self.rows):
+            for y in range(self.cols):
+                self.grid[x][y] = None
 
-new_board = Board()
-print new_board
-
-new_board.play_at(0, 0, "O")
-print new_board
+    def can_play_at(self, x, y):
+        return self.grid[x][y] is None
