@@ -53,8 +53,6 @@ class WinningTests(unittest.TestCase):
         assert not draw(diagonal_win)
 
     def test_draw(self):
-        print draw_grid[0]
-        print draw_grid[0][0]
         assert draw(draw_grid)
         assert not win(draw_grid)
 

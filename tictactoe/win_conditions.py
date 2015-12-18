@@ -56,8 +56,10 @@ def win(game_grid):
 # Check if every tile of the grid is filled
 
 def grid_filled(game_grid):
-    for x in game_grid:
-        for y in game_grid[x]:
+    rows = len(game_grid)
+    cols = len(game_grid[0])
+    for x in range(rows):
+        for y in range(cols):
             if game_grid[x][y] is None:
                 return False
     return True
