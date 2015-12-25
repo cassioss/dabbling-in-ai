@@ -3,6 +3,7 @@ from board import Board
 
 test_board_1 = Board()
 test_board_2 = Board()
+test_board_3 = Board()
 
 
 class WinningTests(unittest.TestCase):
@@ -24,6 +25,11 @@ class WinningTests(unittest.TestCase):
         assert test_board_1.play_to_pos(4) == test_board_1.grid[1][1]
         assert test_board_1.play_to_pos(5) == test_board_1.grid[1][2]
         assert test_board_1.play_to_pos(7) == test_board_1.grid[2][1]
+
+    def test_available_plays(self):
+        assert test_board_3.available_plays() == range(0, 9)
+        test_board_3.play_at(0, 0, "O")
+        assert test_board_3.available_plays() == range(1, 9)
 
 
 def main():

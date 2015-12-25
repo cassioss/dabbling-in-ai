@@ -9,6 +9,8 @@ class RandomPlayer(Player):
     def strategy(self):
         return self.random_play()
 
+    def available_plays(self):
+        return self.board.available_plays()
+
     def random_play(self):
-        print self.board.available_plays
-        return random.choice(self.board.available_plays)
+        print random.choice(self.available_plays())

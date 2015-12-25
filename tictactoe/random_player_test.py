@@ -1,5 +1,6 @@
 import unittest
 from random_player import *
+from board import *
 
 # Basic tests for a random player.
 
@@ -24,16 +25,18 @@ filled_grid = [
 
 class RandomPlayerTests(unittest.TestCase):
     def test_empty_grid(self):
-        rand_player = RandomPlayer(empty_grid, "O")
-        assert rand_player.strategy() in range(0, 9)
+        empty_board = Board()
+        empty_board.create_board_from_grid(empty_grid)
+        rand_player = RandomPlayer(empty_board, "O")
+        play = rand_player.strategy()
+        assert 0 <= play <= 8
 
     def test_partially_filled_grid(self):
-        rand_player = RandomPlayer(partially_filled_grid, "O")
-        assert rand_player.strategy() in range(6, 9)
-
-    def test_filled_grid(self):
-        rand_player = RandomPlayer(filled_grid, "O")
-        print rand_player.strategy() is None
+        partially_filled_board = Board()
+        partially_filled_board.create_board_from_grid(partially_filled_grid)
+        rand_player = RandomPlayer(partially_filled_board, "O")
+        play = rand_player.strategy()
+        assert 6 <= play <= 8
 
 
 def main():

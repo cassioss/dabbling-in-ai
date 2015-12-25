@@ -9,11 +9,9 @@ class Board():
     rows = 3
     cols = 3
     grid = [[]]
-    available_plays = []
 
     def __init__(self):
         self.grid = [[None for y in range(self.cols)] for x in range(self.rows)]
-        self.available_plays = range(0, 9)
 
     def __str__(self):
         output = "\n"
@@ -30,18 +28,32 @@ class Board():
                 output += "-" * (2 * self.cols - 1) + "\n"
         return output
 
+    def create_board_from_grid(self, grid):
+        self.grid = grid
+
+    def available_plays(self):
+        plays = []
+        for i in range(0, 9):
+            if self.grid[i / 3][i % 3] is None:
+                plays.append(i)
+        return plays
+
     def play_at(self, x, y, symbol):
         self.grid[x][y] = symbol
-        self.available_plays.remove(x * 3 + y)
+
+    def _play_at(self, num, symbol):
+        self.play_at(num / 3, num % 3, symbol)
+
+    def can_play_at(self, x, y):
+        return self.grid[x][y] is None
+
+    def _can_play_at(self, num):
+        return self.can_play_at(num / 3, num % 3)
 
     def restart(self):
         for x in range(self.rows):
             for y in range(self.cols):
                 self.grid[x][y] = None
-        self.available_plays = range(0, 9)
-
-    def can_play_at(self, x, y):
-        return self.available_plays.__contains__(x * 3 + y)
 
     def play_to_pos(self, play):
         return self.grid[play / 3][play % 3]
