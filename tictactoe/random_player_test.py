@@ -5,15 +5,15 @@ from board import *
 # Basic tests for a random player.
 
 empty_grid = [
-    [],
-    [],
-    []
+    [None, None, None],
+    [None, None, None],
+    [None, None, None]
 ]
 
 partially_filled_grid = [
     ["O", "X", "O"],
     ["X", "O", "X"],
-    []
+    [None, None, None]
 ]
 
 filled_grid = [

@@ -13,4 +13,4 @@ class RandomPlayer(Player):
         return self.board.available_plays()
 
     def random_play(self):
-        print random.choice(self.available_plays())
+        return random.choice(self.available_plays())

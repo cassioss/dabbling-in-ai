@@ -33,7 +33,7 @@ class Board():
 
     def available_plays(self):
         plays = []
-        for i in range(0, 9):
+        for i in range(9):
             if self.grid[i / 3][i % 3] is None:
                 plays.append(i)
         return plays
