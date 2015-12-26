@@ -8,10 +8,11 @@
 class Board():
     rows = 3
     cols = 3
-    grid = [[]]
 
     def __init__(self):
         self.grid = [[None for y in range(self.cols)] for x in range(self.rows)]
+        self.cross_plays = []
+        self.round_plays = []
 
     def __str__(self):
         output = "\n"
@@ -40,6 +41,10 @@ class Board():
 
     def play_at(self, x, y, symbol):
         self.grid[x][y] = symbol
+        if symbol is "X":
+            self.cross_plays.append(3 * x + y)
+        if symbol is "O":
+            self.round_plays.append(3 * x + y)
 
     def _play_at(self, num, symbol):
         self.play_at(num / 3, num % 3, symbol)
@@ -57,3 +62,11 @@ class Board():
 
     def play_to_pos(self, play):
         return self.grid[play / 3][play % 3]
+
+    @staticmethod
+    def is_an_edge(play):
+        return play == 1 or play == 3 or play == 5 or play == 7
+
+    @staticmethod
+    def is_a_corner(play):
+        return play == 0 or play == 2 or play == 6 or play == 8
