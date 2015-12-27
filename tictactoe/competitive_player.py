@@ -28,3 +28,16 @@ class CompetitivePlayer(Player):
     @staticmethod
     def play_at_center():
         return 4
+
+    @staticmethod
+    def play_at_adjacent_corner(previous_corner, opponent_play):
+        if previous_corner is (0 or 8):
+            if opponent_play is not (0 or 1 or 2 or 5 or 8):
+                return 2
+            else:
+                return 6
+        elif previous_corner is (2 or 6):
+            if opponent_play is not (2 or 5 or 6 or 7 or 8):
+                return 8
+            else:
+                return 0
