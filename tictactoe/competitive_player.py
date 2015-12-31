@@ -1,28 +1,47 @@
 from player import Player
 from random import choice
 from board import Board
+from collections import defaultdict
 
 
 class CompetitivePlayer(Player):
+    complete_win = defaultdict(lambda: None)
+
     def __init__(self, board, symbol):
         Player.__init__(self, board, symbol)
+        self.add_games()
+
+    def add_game_to_completion(self, a, b, c):
+        self.complete_win[(a, b)] = self.complete_win[(b, a)] = c
+        self.complete_win[(a, c)] = self.complete_win[(c, a)] = b
+        self.complete_win[(b, c)] = self.complete_win[(c, b)] = a
+
+    def add_games(self):
+        self.add_game_to_completion(0, 1, 2)
+        self.add_game_to_completion(0, 4, 8)
+        self.add_game_to_completion(0, 3, 6)
+        self.add_game_to_completion(1, 4, 7)
+        self.add_game_to_completion(2, 4, 6)
+        self.add_game_to_completion(2, 5, 8)
+        self.add_game_to_completion(3, 4, 5)
+        self.add_game_to_completion(6, 7, 8)
 
     def strategy(self):
-        return self.ideal_play(self.board.available_plays(), self.my_plays(), self.opponent_plays())
+        return self.ideal_play(len(self.board.available_plays()), self.my_plays(), self.opponent_plays())
 
     def ideal_play(self, available_plays, my_plays, opponent_plays):
-        if len(available_plays) == 9:
+        if available_plays == 9:
             return choice([0, 2, 6, 8])
-        elif len(available_plays) == 8:
+        elif available_plays == 8:
             if Board.is_a_corner(opponent_plays.get(0)):
                 return self.play_at_center()
             else:
-                return self.play_at_corners()
-        else:
+                return self.play_at_corner()
+        elif len(available_plays) == 7:
             return 0
 
     @staticmethod
-    def play_at_corners():
+    def play_at_corner():
         return choice([0, 2, 6, 8])
 
     @staticmethod
@@ -41,20 +60,3 @@ class CompetitivePlayer(Player):
                 return 8
             else:
                 return 0
-
-    @staticmethod
-    def complete_win(first_play, second_play):
-        if first_play is 0:
-            if second_play is 1:
-                return 2
-            if second_play is 2:
-                return 1
-            if second_play is 3:
-                return 6
-            if second_play is 6:
-                return 3
-            else:
-                return 8
-        else:
-            return 2
-

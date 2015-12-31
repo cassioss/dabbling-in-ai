@@ -1,6 +1,7 @@
 # Defines a generic player of tic-tac-toe.
 
 from abc import ABCMeta, abstractmethod
+from random import choice
 
 
 class Player():
@@ -27,6 +28,12 @@ class Player():
             return self.board.round_plays
         else:
             return self.board.cross_plays
+
+    def available_plays(self):
+        return self.board.available_plays()
+
+    def random_play(self):
+        return choice(self.available_plays())
 
     @abstractmethod
     def strategy(self):

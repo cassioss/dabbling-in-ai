@@ -1,5 +1,4 @@
 from player import Player
-import random
 
 
 class RandomPlayer(Player):
@@ -8,9 +7,3 @@ class RandomPlayer(Player):
 
     def strategy(self):
         return self.random_play()
-
-    def available_plays(self):
-        return self.board.available_plays()
-
-    def random_play(self):
-        return random.choice(self.available_plays())
