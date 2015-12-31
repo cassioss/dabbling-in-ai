@@ -41,3 +41,20 @@ class CompetitivePlayer(Player):
                 return 8
             else:
                 return 0
+
+    @staticmethod
+    def complete_win(first_play, second_play):
+        if first_play is 0:
+            if second_play is 1:
+                return 2
+            if second_play is 2:
+                return 1
+            if second_play is 3:
+                return 6
+            if second_play is 6:
+                return 3
+            else:
+                return 8
+        else:
+            return 2
+
