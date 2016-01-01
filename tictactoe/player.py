@@ -17,7 +17,8 @@ class Player():
 
     def play(self):
         print "Player " + str(self.id) + "'s turn:"
-        return self.strategy()
+        my_play = self.strategy()
+        self.board.play_at_num(my_play, self.symbol)
 
     def my_plays(self):
         if self.symbol is "O":

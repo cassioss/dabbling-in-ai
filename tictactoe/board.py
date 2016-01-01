@@ -46,7 +46,7 @@ class Board():
         if symbol is "O":
             self.round_plays.append(3 * x + y)
 
-    def _play_at(self, num, symbol):
+    def play_at_num(self, num, symbol):
         self.play_at(num / 3, num % 3, symbol)
 
     def can_play_at(self, x, y):
