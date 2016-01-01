@@ -16,8 +16,10 @@ class Player():
         self.score = 0
 
     def play(self):
-        print "Player " + str(self.id) + "'s turn:"
+        output = "Player " + str(self.id) + "'s turn: "
         my_play = self.strategy()
+        output += str(my_play)
+        print output
         self.board.play_at_num(my_play, self.symbol)
 
     def my_plays(self):

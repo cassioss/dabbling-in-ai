@@ -3,6 +3,7 @@ from competitive_player import CompetitivePlayer
 from board import Board
 from random import randint
 from win_conditions import win
+from win_conditions import draw
 
 GAME_TYPE_1 = 1
 GAME_TYPE_2 = 2
@@ -14,7 +15,7 @@ GAME_TYPE_6 = 6
 NUM_OF_GAMES = 4
 
 
-class Game():
+class Game:
     def __init__(self, game_type):
         self.board = Board()
         self.coin_toss = randint(0, 1) == 1
@@ -35,9 +36,9 @@ class Game():
         self.run()
 
     def run(self):
-        while (self.total_of_games < NUM_OF_GAMES):
+        print "NEW GAME\n"
+        while self.total_of_games < NUM_OF_GAMES:
             self.turn()
-            self.total_of_games += 1
 
     def coin_tossed(self, for_player_1):
         if self.coin_toss is for_player_1:
@@ -45,11 +46,28 @@ class Game():
         else:
             return "X"
 
+    def print_scores(self):
+        print "Player " + str(self.player_1.id) + "'s score: " + str(self.player_1.score)
+        print "Player " + str(self.player_2.id) + "'s score: " + str(self.player_2.score) + "\n"
+
     def compute_play(self, player):
         player.play()
         print self.board
         if win(self.board.grid):
+            print "Player " + str(player.id) + " wins!"
+            self.total_of_games += 1
+            print "Number of games: " + str(self.total_of_games) + "\n"
+            player.score += 1
+            self.print_scores()
             return True
+        elif draw(self.board.grid):
+            print "It's a draw"
+            self.total_of_games += 1
+            print "Number of games: " + str(self.total_of_games) + "\n"
+            self.print_scores()
+            return True
+        else:
+            return False
 
     def turn(self):
         if self.coin_toss is True:
@@ -64,7 +82,6 @@ class Game():
             self.restart(second_player)
 
     def restart(self, player):
-        player.score += 1
         self.board.restart()
 
 
