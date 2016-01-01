@@ -11,6 +11,8 @@ GAME_TYPE_4 = 4
 GAME_TYPE_5 = 5
 GAME_TYPE_6 = 6
 
+NUM_OF_GAMES = 1
+
 
 class Game():
     def __init__(self, game_type):
@@ -29,6 +31,11 @@ class Game():
             self.player_1 = CompetitivePlayer(self.board, self.coin_tossed(True))
             self.player_2 = CompetitivePlayer(self.board, self.coin_tossed(False))
 
+        self.run()
+
+    def run(self):
+        self.turn()
+
     def coin_tossed(self, for_player_1):
         if self.coin_toss is for_player_1:
             return "O"
@@ -37,7 +44,8 @@ class Game():
 
     def compute_play(self, player):
         player.play()
-        if win(self.board):
+        print self.board
+        if win(self.board.grid):
             return True
 
     def turn(self):
@@ -55,3 +63,5 @@ class Game():
     def restart(self, player):
         player.score += 1
         self.board.restart()
+
+Game(1)
