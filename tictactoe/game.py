@@ -11,30 +11,33 @@ GAME_TYPE_4 = 4
 GAME_TYPE_5 = 5
 GAME_TYPE_6 = 6
 
-NUM_OF_GAMES = 1
+NUM_OF_GAMES = 4
 
 
 class Game():
     def __init__(self, game_type):
         self.board = Board()
         self.coin_toss = randint(0, 1) == 1
+        self.total_of_games = 0
 
         if game_type is GAME_TYPE_1:
-            self.player_1 = RandomPlayer(self.board, self.coin_tossed(True))
-            self.player_2 = RandomPlayer(self.board, self.coin_tossed(False))
+            self.player_1 = RandomPlayer(1, self.board, self.coin_tossed(True))
+            self.player_2 = RandomPlayer(2, self.board, self.coin_tossed(False))
 
         elif game_type is GAME_TYPE_2:
-            self.player_1 = RandomPlayer(self.board, self.coin_tossed(True))
-            self.player_2 = CompetitivePlayer(self.board, self.coin_tossed(False))
+            self.player_1 = RandomPlayer(1, self.board, self.coin_tossed(True))
+            self.player_2 = CompetitivePlayer(2, self.board, self.coin_tossed(False))
 
         elif game_type is GAME_TYPE_3:
-            self.player_1 = CompetitivePlayer(self.board, self.coin_tossed(True))
-            self.player_2 = CompetitivePlayer(self.board, self.coin_tossed(False))
+            self.player_1 = CompetitivePlayer(1, self.board, self.coin_tossed(True))
+            self.player_2 = CompetitivePlayer(2, self.board, self.coin_tossed(False))
 
         self.run()
 
     def run(self):
-        self.turn()
+        while (self.total_of_games < NUM_OF_GAMES):
+            self.turn()
+            self.total_of_games += 1
 
     def coin_tossed(self, for_player_1):
         if self.coin_toss is for_player_1:
@@ -63,5 +66,6 @@ class Game():
     def restart(self, player):
         player.score += 1
         self.board.restart()
+
 
 Game(1)

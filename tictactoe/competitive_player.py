@@ -7,8 +7,8 @@ from collections import defaultdict
 class CompetitivePlayer(Player):
     complete_win = defaultdict(lambda: None)
 
-    def __init__(self, board, symbol):
-        Player.__init__(self, board, symbol)
+    def __init__(self, id, board, symbol):
+        Player.__init__(self, id, board, symbol)
         self.add_games()
 
     def add_game_to_completion(self, a, b, c):

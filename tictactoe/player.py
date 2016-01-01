@@ -9,12 +9,14 @@ class Player():
     symbol = None
     board = None
 
-    def __init__(self, board, symbol):
+    def __init__(self, id, board, symbol):
+        self.id = id
         self.board = board
         self.symbol = symbol
         self.score = 0
 
     def play(self):
+        print "Player " + str(self.id) + "'s turn:"
         return self.strategy()
 
     def my_plays(self):
