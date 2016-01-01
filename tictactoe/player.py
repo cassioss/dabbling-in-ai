@@ -8,11 +8,11 @@ class Player():
     __metaclass__ = ABCMeta
     symbol = None
     board = None
-    score = 0
 
     def __init__(self, board, symbol):
         self.board = board
         self.symbol = symbol
+        self.score = 0
 
     def play(self):
         return self.strategy()
