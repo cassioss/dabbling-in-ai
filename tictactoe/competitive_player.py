@@ -26,6 +26,13 @@ class CompetitivePlayer(Player):
         self.add_game_to_completion(3, 4, 5)
         self.add_game_to_completion(6, 7, 8)
 
+    def to_complete_game(self, first_play, second_play):
+        return self.complete_win[(first_play, second_play)]
+
+    def can_complete_game(self, first_play, second_play):
+        play = self.to_complete_game(first_play, second_play)
+        return (play is not None) and (self.board.can_play_at_number(play))
+
     def strategy(self):
         return self.ideal_play(len(self.board.available_plays()), self.my_plays(), self.opponent_plays())
 

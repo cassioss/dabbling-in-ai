@@ -52,7 +52,7 @@ class Board():
     def can_play_at(self, x, y):
         return self.grid[x][y] is None
 
-    def _can_play_at(self, num):
+    def can_play_at_number(self, num):
         return self.can_play_at(num / 3, num % 3)
 
     def restart(self):
