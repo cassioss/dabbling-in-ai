@@ -20,7 +20,11 @@ class Game:
         self.board = Board()
         self.coin_toss = randint(0, 1) == 1
         self.total_of_games = 0
+        self.number_of_draws = 0
+        self.set_game(game_type)
+        self.run()
 
+    def set_game(self, game_type):
         if game_type is GAME_TYPE_1:
             self.player_1 = RandomPlayer(1, self.board, self.coin_tossed(True))
             self.player_2 = RandomPlayer(2, self.board, self.coin_tossed(False))
@@ -32,8 +36,6 @@ class Game:
         elif game_type is GAME_TYPE_3:
             self.player_1 = CompetitivePlayer(1, self.board, self.coin_tossed(True))
             self.player_2 = CompetitivePlayer(2, self.board, self.coin_tossed(False))
-
-        self.run()
 
     def run(self):
         print "NEW GAME\n"
@@ -48,7 +50,8 @@ class Game:
 
     def print_scores(self):
         print "Player " + str(self.player_1.id) + "'s score: " + str(self.player_1.score)
-        print "Player " + str(self.player_2.id) + "'s score: " + str(self.player_2.score) + "\n"
+        print "Player " + str(self.player_2.id) + "'s score: " + str(self.player_2.score)
+        print "Number of draws: " + str(self.number_of_draws) + "\n"
 
     def compute_play(self, player):
         player.play()
@@ -64,6 +67,7 @@ class Game:
             print "It's a draw"
             self.total_of_games += 1
             print "Number of games: " + str(self.total_of_games) + "\n"
+            self.number_of_draws += 1
             self.print_scores()
             return True
         else:
