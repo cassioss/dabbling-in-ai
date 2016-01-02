@@ -10,7 +10,11 @@ class Board:
     cols = 3
 
     def __init__(self):
-        self.grid = [[None for y in range(self.cols)] for x in range(self.rows)]
+        self.grid = [
+            [None, None, None],
+            [None, None, None],
+            [None, None, None]
+        ]
         self.cross_plays = []
         self.round_plays = []
 
