@@ -5,7 +5,7 @@
 # Class resembling a game board, which is assumed to be rectangular.
 
 
-class Board():
+class Board:
     rows = 3
     cols = 3
 

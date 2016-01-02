@@ -12,19 +12,16 @@ GAME_TYPE_4 = 4
 GAME_TYPE_5 = 5
 GAME_TYPE_6 = 6
 
-NUM_OF_GAMES = 4
+GAMES_LIMIT = 4
 
 
 class Game:
     def __init__(self, game_type):
         self.board = Board()
         self.coin_toss = randint(0, 1) == 1
-        self.total_of_games = 0
+        self.number_of_games = 0
         self.number_of_draws = 0
-        self.set_game(game_type)
-        self.run()
 
-    def set_game(self, game_type):
         if game_type is GAME_TYPE_1:
             self.player_1 = RandomPlayer(1, self.board, self.coin_tossed(True))
             self.player_2 = RandomPlayer(2, self.board, self.coin_tossed(False))
@@ -37,9 +34,11 @@ class Game:
             self.player_1 = CompetitivePlayer(1, self.board, self.coin_tossed(True))
             self.player_2 = CompetitivePlayer(2, self.board, self.coin_tossed(False))
 
+        self.run()
+
     def run(self):
         print "NEW GAME\n"
-        while self.total_of_games < NUM_OF_GAMES:
+        while self.number_of_games < GAMES_LIMIT:
             self.turn()
 
     def coin_tossed(self, for_player_1):
@@ -56,22 +55,39 @@ class Game:
     def compute_play(self, player):
         player.play()
         print self.board
-        if win(self.board.grid):
-            print "Player " + str(player.id) + " wins!"
-            self.total_of_games += 1
-            print "Number of games: " + str(self.total_of_games) + "\n"
-            player.score += 1
-            self.print_scores()
+
+        if self.won():
+            self.winner(player)
+            self.print_board()
             return True
-        elif draw(self.board.grid):
-            print "It's a draw"
-            self.total_of_games += 1
-            print "Number of games: " + str(self.total_of_games) + "\n"
-            self.number_of_draws += 1
-            self.print_scores()
+
+        elif self.drew():
+            self.draw()
+            self.print_board()
             return True
+
         else:
             return False
+
+    def won(self):
+        return win(self.board.grid)
+
+    def drew(self):
+        return draw(self.board.grid)
+
+    @staticmethod
+    def winner(player):
+        print "Player " + str(player.id) + " wins!"
+        player.score += 1
+
+    def draw(self):
+        print "It's a draw"
+        self.number_of_draws += 1
+
+    def print_board(self):
+        self.number_of_games += 1
+        print "Number of games: " + str(self.number_of_games) + "\n"
+        self.print_scores()
 
     def turn(self):
         if self.coin_toss is True:
@@ -81,11 +97,11 @@ class Game:
 
     def take_turns(self, first_player, second_player):
         if self.compute_play(first_player):
-            self.restart(first_player)
+            self.restart()
         elif self.compute_play(second_player):
-            self.restart(second_player)
+            self.restart()
 
-    def restart(self, player):
+    def restart(self):
         self.board.restart()
 
 

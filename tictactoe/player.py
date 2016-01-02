@@ -9,8 +9,8 @@ class Player():
     symbol = None
     board = None
 
-    def __init__(self, id, board, symbol):
-        self.id = id
+    def __init__(self, player_id, board, symbol):
+        self.id = player_id
         self.board = board
         self.symbol = symbol
         self.score = 0
@@ -21,7 +21,7 @@ class Player():
         self.board.play_at_num(my_play, self.symbol)
 
     def print_play(self, play):
-        return "Player " + str(self.id) + "'s turn: " + str(play)
+        print "Player " + str(self.id) + "'s turn: " + str(play)
 
     def my_plays(self):
         if self.symbol is "O":
