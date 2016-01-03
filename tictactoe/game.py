@@ -4,6 +4,7 @@ from board import Board
 from random import randint
 from win_conditions import win
 from win_conditions import draw
+from game_writer import write_output
 
 GAME_TYPE_1 = 1
 GAME_TYPE_2 = 2
@@ -12,7 +13,7 @@ GAME_TYPE_4 = 4
 GAME_TYPE_5 = 5
 GAME_TYPE_6 = 6
 
-GAMES_LIMIT = 4
+GAMES_LIMIT = 1000000
 
 
 class Game:
@@ -21,6 +22,7 @@ class Game:
         self.coin_toss = randint(0, 1) == 1
         self.number_of_games = 0
         self.number_of_draws = 0
+        self.game_plays = []
 
         if game_type is GAME_TYPE_1:
             self.player_1 = RandomPlayer(1, self.board, self.coin_tossed(True))
@@ -53,17 +55,22 @@ class Game:
         print "Number of draws: " + str(self.number_of_draws) + "\n"
 
     def compute_play(self, player):
-        player.play()
+        play, symbol = player.play()
+        self.board.play_at_num(play, symbol)
+        self.game_plays.append(play)
+
         print self.board
 
         if self.won():
             self.winner(player)
             self.print_board()
+            write_output(self.game_plays, 1)
             return True
 
         elif self.drew():
             self.draw()
             self.print_board()
+            write_output(self.game_plays, 0)
             return True
 
         else:
@@ -88,6 +95,7 @@ class Game:
         self.number_of_games += 1
         print "Number of games: " + str(self.number_of_games) + "\n"
         self.print_scores()
+        print "Plays: " + str(self.game_plays) + "\n"
 
     def turn(self):
         if self.coin_toss is True:
@@ -103,6 +111,7 @@ class Game:
 
     def restart(self):
         self.board.restart()
+        self.game_plays = []
 
 
 Game(1)

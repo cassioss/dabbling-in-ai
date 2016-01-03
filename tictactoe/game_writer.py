@@ -3,5 +3,5 @@
 
 def write_output(plays_list, game_result):
     f = open('games.txt', 'a')
-    list_to_write = str(plays_list).replace(' ', '').replace('[', '').replace(']', '') + ',' + str(game_result)
+    list_to_write = str(plays_list).replace(' ', '').replace('[', '').replace(']', '') + ',' + str(game_result) + '\n'
     f.write(list_to_write)

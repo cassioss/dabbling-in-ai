@@ -18,7 +18,7 @@ class Player():
     def play(self):
         my_play = self.strategy()
         self.print_play(my_play)
-        self.board.play_at_num(my_play, self.symbol)
+        return my_play, self.symbol
 
     def print_play(self, play):
         print "Player " + str(self.id) + "'s turn: " + str(play)
