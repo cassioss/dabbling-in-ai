@@ -13,7 +13,7 @@ GAME_TYPE_4 = 4
 GAME_TYPE_5 = 5
 GAME_TYPE_6 = 6
 
-GAMES_LIMIT = 1000000
+GAMES_LIMIT = 100000
 
 
 class Game:
@@ -64,13 +64,13 @@ class Game:
         if self.won():
             self.winner(player)
             self.print_board()
-            write_output(self.game_plays, 1)
+            write_output(self.game_plays, 100)
             return True
 
         elif self.drew():
             self.draw()
             self.print_board()
-            write_output(self.game_plays, 0)
+            write_output(self.game_plays, 1)
             return True
 
         else:
