@@ -1,42 +1,30 @@
 import unittest
-from random_player import *
+from competitive_player import *
 from board import *
 
-# Basic tests for a random player.
 
-empty_grid = [
-    [None, None, None],
-    [None, None, None],
-    [None, None, None]
-]
+# Basic tests for a competitive player.
 
-partially_filled_grid = [
-    ["O", "X", "O"],
-    ["X", "O", "X"],
-    [None, None, None]
-]
+class CompetitivePlayerTests(unittest.TestCase):
+    empty_board = Board()
+    generic_id = 1
+    generic_symbol = 'O'
+    com_player = CompetitivePlayer(generic_id, empty_board, generic_symbol)
 
-filled_grid = [
-    ["O", "X", "O"],
-    ["X", "O", "X"],
-    ["X", "O", "X"]
-]
+    def test_complete_win(self):
+        assert self.com_player.complete_win[(0, 4)] == 8
+        assert self.com_player.complete_win[(2, 4)] == 6
+        assert self.com_player.complete_win[(0, 1)] == 2
+        assert self.com_player.complete_win[(3, 4)] == 5
+        assert self.com_player.complete_win[(6, 7)] == 8
+        assert self.com_player.complete_win[(0, 3)] == 6
+        assert self.com_player.complete_win[(1, 4)] == 7
+        assert self.com_player.complete_win[(2, 5)] == 8
 
-
-class RandomPlayerTests(unittest.TestCase):
-    def test_empty_grid(self):
-        empty_board = Board()
-        empty_board.create_board_from_grid(empty_grid)
-        rand_player = RandomPlayer(1, empty_board, "O")
-        play = rand_player.strategy()
-        assert 0 <= play <= 8
-
-    def test_partially_filled_grid(self):
-        partially_filled_board = Board()
-        partially_filled_board.create_board_from_grid(partially_filled_grid)
-        rand_player = RandomPlayer(1, partially_filled_board, "O")
-        play = rand_player.strategy()
-        assert 6 <= play <= 8
+    def test_can_complete_game(self):
+        assert self.com_player.can_complete_game(0, 1)
+        assert self.com_player.can_complete_game(3, 4)
+        assert self.com_player.can_complete_game(3, 4)
 
 
 def main():
@@ -45,4 +33,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

@@ -5,16 +5,10 @@ from collections import defaultdict
 
 
 class CompetitivePlayer(Player):
-
     def __init__(self, player_id, board, symbol):
         Player.__init__(self, player_id, board, symbol)
         self.complete_win = defaultdict(lambda: None)
         self.add_games()
-
-    def add_game_to_completion(self, a, b, c):
-        self.complete_win[(a, b)] = self.complete_win[(b, a)] = c
-        self.complete_win[(a, c)] = self.complete_win[(c, a)] = b
-        self.complete_win[(b, c)] = self.complete_win[(c, b)] = a
 
     def add_games(self):
         self.add_game_to_completion(0, 1, 2)
@@ -26,12 +20,17 @@ class CompetitivePlayer(Player):
         self.add_game_to_completion(3, 4, 5)
         self.add_game_to_completion(6, 7, 8)
 
-    def to_complete_game(self, first_play, second_play):
-        return self.complete_win[(first_play, second_play)]
+    def add_game_to_completion(self, a, b, c):
+        self.complete_win[(a, b)] = self.complete_win[(b, a)] = c
+        self.complete_win[(a, c)] = self.complete_win[(c, a)] = b
+        self.complete_win[(b, c)] = self.complete_win[(c, b)] = a
 
     def can_complete_game(self, first_play, second_play):
         play = self.to_complete_game(first_play, second_play)
         return (play is not None) and (self.board.can_play_at_number(play))
+
+    def to_complete_game(self, first_play, second_play):
+        return self.complete_win[(first_play, second_play)]
 
     def strategy(self):
         return self.ideal_play(len(self.board.available_plays()), self.my_plays(), self.opponent_plays())
