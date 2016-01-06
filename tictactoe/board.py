@@ -63,6 +63,8 @@ class Board:
         for x in range(self.rows):
             for y in range(self.cols):
                 self.grid[x][y] = None
+        self.cross_plays = []
+        self.round_plays = []
 
     def play_to_pos(self, play):
         return self.grid[play / 3][play % 3]

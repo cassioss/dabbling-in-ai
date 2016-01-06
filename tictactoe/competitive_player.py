@@ -5,6 +5,8 @@ from collections import defaultdict
 
 
 class CompetitivePlayer(Player):
+    # Non-strategic methods - sets Player and eases how to complete games
+
     def __init__(self, player_id, board, symbol):
         Player.__init__(self, player_id, board, symbol)
         self.complete_win = defaultdict(lambda: None)
@@ -25,15 +27,47 @@ class CompetitivePlayer(Player):
         self.complete_win[(a, c)] = self.complete_win[(c, a)] = b
         self.complete_win[(b, c)] = self.complete_win[(c, b)] = a
 
+    def completes_game_in(self, first_play, second_play):
+        return self.complete_win[(first_play, second_play)]
+
     def can_complete_game(self, first_play, second_play):
-        play = self.to_complete_game(first_play, second_play)
+        play = self.completes_game_in(first_play, second_play)
         return (play is not None) and (self.board.can_play_at_number(play))
 
-    def to_complete_game(self, first_play, second_play):
-        return self.complete_win[(first_play, second_play)]
+    # Strategic methods - set to only allow wins and ties
 
     def strategy(self):
         return self.ideal_play(len(self.board.available_plays()), self.my_plays(), self.opponent_plays())
+
+    # Non-losing strategies for the first turn
+
+    @staticmethod
+    def first_turn():
+        return choice([0, 2, 4, 6, 8])
+
+    # Non-losing strategies for the second turn
+
+    @staticmethod
+    def played_at_center(play):
+        return play == 4
+
+    def second_turn(self, opponent_first_play):
+        if self.played_at_center(opponent_first_play):
+            return choice([0, 2, 6, 8])
+        else:
+            return 4
+
+    # Non-losing strategies for the third turn
+
+    @staticmethod
+    def played_at_corner(play):
+        return play == (0 or 2 or 6 or 8)
+
+    def third_turn(self, your_first_play, opponent_first_play):
+        if self.played_at_corner(your_first_play):
+            if not self.played_at_center(opponent_first_play):
+                return 4
+        return 4
 
     def ideal_play(self, available_plays, my_plays, opponent_plays):
         if available_plays == 9:
