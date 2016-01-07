@@ -1,10 +1,10 @@
 from player import Player
 from random import choice
-from board import Board
 from collections import defaultdict
 
 
 class CompetitivePlayer(Player):
+
     # Non-strategic methods - sets Player and eases how to complete games
 
     def __init__(self, player_id, board, symbol):
@@ -63,22 +63,48 @@ class CompetitivePlayer(Player):
     def played_at_corner(play):
         return play == (0 or 2 or 6 or 8)
 
+    @staticmethod
+    def closest_corner(last_corner):
+        if last_corner is (0 or 8):
+            return choice([2, 6])
+        elif last_corner is (2 or 6):
+            return choice([0, 8])
+
+    @staticmethod
+    def play_at_distant_corner(edge):
+        if edge is 1:
+            return choice([6, 8])
+        elif edge is 3:
+            return choice([2, 8])
+        elif edge is 5:
+            return choice([0, 6])
+        elif edge is 7:
+            return choice([0, 2])
+
+    @staticmethod
+    def play_at_opposite_corner(corner):
+        return 8 - corner
+
     def third_turn(self, your_first_play, opponent_first_play):
         if self.played_at_corner(your_first_play):
             if not self.played_at_center(opponent_first_play):
                 return 4
-        return 4
+            else:
+                return self.closest_corner(your_first_play)
+
+        elif self.played_at_center(your_first_play):
+            if not self.played_at_corner(opponent_first_play):
+                return self.play_at_distant_corner(opponent_first_play)
+            else:
+                return self.play_at_opposite_corner(opponent_first_play)
 
     def ideal_play(self, available_plays, my_plays, opponent_plays):
         if available_plays == 9:
-            return choice([0, 2, 6, 8])
+            return self.first_turn()
         elif available_plays == 8:
-            if Board.is_a_corner(opponent_plays.get(0)):
-                return self.play_at_center()
-            else:
-                return self.play_at_corner()
+            return self.second_turn(opponent_plays.get(0))
         elif len(available_plays) == 7:
-            return 0
+            return self.third_turn(my_plays.get(0), opponent_plays.get(0))
 
     @staticmethod
     def play_at_corner():
