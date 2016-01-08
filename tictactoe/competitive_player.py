@@ -4,7 +4,6 @@ from collections import defaultdict
 
 
 class CompetitivePlayer(Player):
-
     # Non-strategic methods - sets Player and eases how to complete games
 
     def __init__(self, player_id, board, symbol):
@@ -39,13 +38,13 @@ class CompetitivePlayer(Player):
     def strategy(self):
         return self.ideal_play(len(self.board.available_plays()), self.my_plays(), self.opponent_plays())
 
-    # Non-losing strategies for the first turn
+    # Non-losing strategies for the competitive player's first turn
 
     @staticmethod
     def first_turn():
         return choice([0, 2, 4, 6, 8])
 
-    # Non-losing strategies for the second turn
+    # Non-losing strategies for the competitive player's second turn
 
     @staticmethod
     def played_at_center(play):
@@ -57,7 +56,7 @@ class CompetitivePlayer(Player):
         else:
             return 4
 
-    # Non-losing strategies for the third turn
+    # Non-losing strategies for the competitive player's third turn
 
     @staticmethod
     def played_at_corner(play):
@@ -98,6 +97,46 @@ class CompetitivePlayer(Player):
             else:
                 return self.play_at_opposite_corner(opponent_first_play)
 
+    # Non-losing strategies for the competitive player's fourth turn
+
+    def defensive_play(self, opponent_play_1, opponent_play_2):
+        return self.completes_game_in(opponent_play_1, opponent_play_2)
+
+    @staticmethod
+    def played_at_opposite_corner(your_play, opponent_play):
+        return your_play + opponent_play == 8
+
+    @staticmethod
+    def play_at_remaining_corner(your_corner):
+        if your_corner is (0 or 8):
+            return choice([2, 6])
+        elif your_corner is (2 or 6):
+            return choice([0, 8])
+
+    @staticmethod
+    def play_at_any_edge():
+        return choice([1, 3, 5, 7])
+
+    def fourth_turn(self, your_first_play, opponent_first_play, opponent_second_play):
+        if self.played_at_corner(your_first_play):
+            if self.played_at_opposite_corner(your_first_play, opponent_second_play):
+                return self.play_at_remaining_corner(your_first_play)
+            else:
+                return self.defensive_play(opponent_first_play, opponent_second_play)
+        else:
+            if self.played_at_opposite_corner(opponent_first_play, opponent_second_play):
+                return self.play_at_any_edge()
+            else:
+                return self.defensive_play(opponent_first_play, opponent_second_play)
+
+    # Last turn - play the only remaining game
+
+    @staticmethod
+    def last_turn(available_plays):
+        return available_plays.get(0)
+
+    # Every turn is gathered around to make the ideal play for the competitive player
+
     def ideal_play(self, available_plays, my_plays, opponent_plays):
         if available_plays == 9:
             return self.first_turn()
@@ -105,24 +144,7 @@ class CompetitivePlayer(Player):
             return self.second_turn(opponent_plays.get(0))
         elif len(available_plays) == 7:
             return self.third_turn(my_plays.get(0), opponent_plays.get(0))
-
-    @staticmethod
-    def play_at_corner():
-        return choice([0, 2, 6, 8])
-
-    @staticmethod
-    def play_at_center():
-        return 4
-
-    @staticmethod
-    def play_at_adjacent_corner(previous_corner, opponent_play):
-        if previous_corner is (0 or 8):
-            if opponent_play is not (0 or 1 or 2 or 5 or 8):
-                return 2
-            else:
-                return 6
-        elif previous_corner is (2 or 6):
-            if opponent_play is not (2 or 5 or 6 or 7 or 8):
-                return 8
-            else:
-                return 0
+        elif len(available_plays) == 6:
+            return self.fourth_turn(my_plays.get(0), opponent_plays.get(0), opponent_plays.get(1))
+        else:
+            return self.last_turn(available_plays)
