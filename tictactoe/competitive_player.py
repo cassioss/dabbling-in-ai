@@ -129,6 +129,12 @@ class CompetitivePlayer(Player):
             else:
                 return self.defensive_play(opponent_first_play, opponent_second_play)
 
+    # Non-losing strategies for the competitive player's fifth turn - he can win from now on
+
+    def fifth_turn(self, you_first, you_second, opp_first, opp_second):
+        if self.can_complete_game(you_first, you_second):
+            return self.completes_game_in(you_first, you_second)
+
     # Last turn - play the only remaining game
 
     @staticmethod
