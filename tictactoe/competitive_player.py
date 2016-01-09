@@ -26,11 +26,11 @@ class CompetitivePlayer(Player):
         self.complete_win[(a, c)] = self.complete_win[(c, a)] = b
         self.complete_win[(b, c)] = self.complete_win[(c, b)] = a
 
-    def completes_game_in(self, first_play, second_play):
+    def winning_play(self, first_play, second_play):
         return self.complete_win[(first_play, second_play)]
 
     def can_complete_game(self, first_play, second_play):
-        play = self.completes_game_in(first_play, second_play)
+        play = self.winning_play(first_play, second_play)
         return (play is not None) and (self.board.can_play_at_number(play))
 
     # Strategic methods - set to only allow wins and ties
@@ -100,7 +100,7 @@ class CompetitivePlayer(Player):
     # Non-losing strategies for the competitive player's fourth turn
 
     def defensive_play(self, opponent_play_1, opponent_play_2):
-        return self.completes_game_in(opponent_play_1, opponent_play_2)
+        return self.winning_play(opponent_play_1, opponent_play_2)
 
     @staticmethod
     def played_at_opposite_corner(your_play, opponent_play):
@@ -133,7 +133,9 @@ class CompetitivePlayer(Player):
 
     def fifth_turn(self, you_first, you_second, opp_first, opp_second):
         if self.can_complete_game(you_first, you_second):
-            return self.completes_game_in(you_first, you_second)
+            return self.winning_play(you_first, you_second)
+        elif self.can_complete_game(opp_first, opp_second):
+            return self.defensive_play(opp_first, opp_second)
 
     # Last turn - play the only remaining game
 
