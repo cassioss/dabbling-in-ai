@@ -50,8 +50,8 @@ class CompetitivePlayer(Player):
     def played_at_center(play):
         return play == 4
 
-    def second_turn(self, opponent_first_play):
-        if self.played_at_center(opponent_first_play):
+    def second_turn(self, opp_first):
+        if self.played_at_center(opp_first):
             return choice([0, 2, 6, 8])
         else:
             return 4
@@ -84,18 +84,18 @@ class CompetitivePlayer(Player):
     def play_at_opposite_corner(corner):
         return 8 - corner
 
-    def third_turn(self, your_first_play, opponent_first_play):
-        if self.played_at_corner(your_first_play):
-            if not self.played_at_center(opponent_first_play):
+    def third_turn(self, you_first, opp_first):
+        if self.played_at_corner(you_first):
+            if not self.played_at_center(opp_first):
                 return 4
             else:
-                return self.closest_corner(your_first_play)
+                return self.closest_corner(you_first)
 
-        elif self.played_at_center(your_first_play):
-            if not self.played_at_corner(opponent_first_play):
-                return self.play_at_distant_corner(opponent_first_play)
+        elif self.played_at_center(you_first):
+            if not self.played_at_corner(opp_first):
+                return self.play_at_distant_corner(opp_first)
             else:
-                return self.play_at_opposite_corner(opponent_first_play)
+                return self.play_at_opposite_corner(opp_first)
 
     # Non-losing strategies for the competitive player's fourth turn
 
@@ -117,25 +117,54 @@ class CompetitivePlayer(Player):
     def play_at_any_edge():
         return choice([1, 3, 5, 7])
 
-    def fourth_turn(self, your_first_play, opponent_first_play, opponent_second_play):
-        if self.played_at_corner(your_first_play):
-            if self.played_at_opposite_corner(your_first_play, opponent_second_play):
-                return self.play_at_remaining_corner(your_first_play)
+    def fourth_turn(self, you_first, opp_first, opp_second):
+        if self.played_at_corner(you_first):
+            if self.played_at_opposite_corner(you_first, opp_second):
+                return self.play_at_remaining_corner(you_first)
             else:
-                return self.defensive_play(opponent_first_play, opponent_second_play)
+                return self.defensive_play(opp_first, opp_second)
+        elif self.played_at_opposite_corner(opp_first, opp_second):
+            return self.play_at_any_edge()
         else:
-            if self.played_at_opposite_corner(opponent_first_play, opponent_second_play):
-                return self.play_at_any_edge()
-            else:
-                return self.defensive_play(opponent_first_play, opponent_second_play)
+            return self.defensive_play(opp_first, opp_second)
 
-    # Non-losing strategies for the competitive player's fifth turn - he can win from now on
+    # Non-losing strategies for the competitive player's fifth turn - possibility to win from now on
+
+    @staticmethod
+    def keep_double_win_status(your_corner, opp_edge):
+        if your_corner is 0:
+            if opp_edge is 1:
+                return 6
+            elif opp_edge is 3:
+                return 2
+
+        elif your_corner is 2:
+            if opp_edge is 1:
+                return 8
+            elif opp_edge is 5:
+                return 0
+
+        elif your_corner is 6:
+            if opp_edge is 3:
+                return 8
+            elif opp_edge is 7:
+                return 0
+
+        elif your_corner is 8:
+            if opp_edge is 5:
+                return 6
+            elif opp_edge is 7:
+                return 2
 
     def fifth_turn(self, you_first, you_second, opp_first, opp_second):
         if self.can_complete_game(you_first, you_second):
             return self.winning_play(you_first, you_second)
+
         elif self.can_complete_game(opp_first, opp_second):
             return self.defensive_play(opp_first, opp_second)
+
+        elif self.played_at_center(you_first):
+            return self.keep_double_win_status(you_second, opp_second)
 
     # Last turn - play the only remaining game
 
@@ -154,5 +183,7 @@ class CompetitivePlayer(Player):
             return self.third_turn(my_plays.get(0), opponent_plays.get(0))
         elif len(available_plays) == 6:
             return self.fourth_turn(my_plays.get(0), opponent_plays.get(0), opponent_plays.get(1))
+        elif len(available_plays) == 5:
+            return self.fifth_turn(my_plays.get(0), my_plays.get(1), opponent_plays.get(0), opponent_plays.get(1))
         else:
-            return self.last_turn(available_plays)
+            return self.random_play()
