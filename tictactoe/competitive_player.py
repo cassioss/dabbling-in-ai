@@ -84,12 +84,35 @@ class CompetitivePlayer(Player):
     def play_at_opposite_corner(corner):
         return 8 - corner
 
+    @staticmethod
+    def play_at_unblocked_close_corner(your_corner, opp_first):
+        if your_corner is 0:
+            if opp_first is not (1 or 7):
+                return 2
+            else:
+                return 6
+        elif your_corner is 2:
+            if opp_first is not (1 or 7):
+                return 0
+            else:
+                return 8
+        elif your_corner is 6:
+            if opp_first is not (1 or 7):
+                return 8
+            else:
+                return 0
+        elif your_corner is 8:
+            if opp_first is not (1 or 7):
+                return 6
+            else:
+                return 2
+
     def third_turn(self, you_first, opp_first):
         if self.played_at_corner(you_first):
             if not self.played_at_center(opp_first):
-                return 4
+                return self.play_at_unblocked_close_corner(you_first, opp_first)
             else:
-                return self.closest_corner(you_first)
+                return self.play_at_opposite_corner(you_first)
 
         elif self.played_at_center(you_first):
             if not self.played_at_corner(opp_first):
